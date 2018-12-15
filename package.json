@@ -1,0 +1,10 @@
+{
+  "name": "dominion_melee",
+  "version": "1.0.0",
+  "description": "Fantasy Deathmatch HTML5 Game",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {},
+  "author": "Jeremy Marin",
+  "license": "ISC"
+}
