@@ -2,9 +2,15 @@
   "name": "dominion_melee",
   "version": "1.0.0",
   "description": "Fantasy Deathmatch HTML5 Game",
+  "private": true,
+  "main": "./src/index.js",
   "dependencies": {},
-  "devDependencies": {},
-  "scripts": {},
+  "devDependencies": {
+    "browser-sync": "^2.26.3"
+  },
+  "scripts": {
+    "start": "browser-sync start --server 'src' --files 'src' --port 4000"
+  },
   "author": "Jeremy Marin",
   "license": "ISC"
 }

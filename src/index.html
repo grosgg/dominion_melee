@@ -4,11 +4,20 @@
   <title>Dominion Melee</title>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
+  <script src="https://unpkg.com/kontra@5.0.4/kontra.js"></script>
 </head>
-<body>
-  <canvas width="320" height="320"></canvas>
-  <script src="js/kontra.js"></script>
-  <script src="js/music.js"></script>
-  <script src="js/game.js"></script>
+<body style="background: black">
+  <canvas width=160 height=160></canvas>
+  <script src="js/player.js"></script>
+  <script src="js/arrow.js"></script>
+  <script src="index.js"></script>
+  <style type="text/css">
+    canvas {
+      width: 640px;
+      background: #50514f;
+      border: 8px solid white;
+      image-rendering: pixelated;
+    }
+  </style>
 </body>
 </html>
