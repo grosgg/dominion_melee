@@ -1,51 +1,43 @@
 const ARROW_SPEED = 1;
+const ARROW_LENGTH = 5
 
 const COLLIDES_WITH_ARROW = ['Walls', 'Trees', 'Buildings'];
 
 class Arrow {
   constructor(shooter) {
-    let x, y, dx, dy;
-    switch(shooter.sprite.aim) {
-      case 'right':
-        x = shooter.sprite.x + shooter.sprite.width;
-        y = shooter.sprite.y + shooter.sprite.height/2;
-        dx = ARROW_SPEED;
-        break;
-      case 'down': 
-        x = shooter.sprite.x + shooter.sprite.width/2;
-        y = shooter.sprite.y + shooter.sprite.height;
-        dy = ARROW_SPEED;
-        break;
-      case 'left': 
-        x = shooter.sprite.x;
-        y = shooter.sprite.y + shooter.sprite.height/2;
-        dx = -ARROW_SPEED;
-        break;
-      case 'up': 
-        x = shooter.sprite.x + shooter.sprite.width/2;
-        y = shooter.sprite.y;
-        dy = -ARROW_SPEED;
-        break;
-    }
+    this.shooter = shooter
+    let coordinates = this.calculateShot();
 
     this.sprite = kontra.sprite({
-      x: x,
-      y: y,
+      x: coordinates.x,
+      y: coordinates.y,
+      prevX: coordinates.x,
+      prevY: coordinates.y,
       type: 'arrow',
 
-      dx: dx || 0,
-      dy: dy || 0,
+      dx: coordinates.dx,
+      dy: coordinates.dy,
 
-      // live only for 2 sec
-      ttl: 50,
+      ttl: 60,
 
-      // arrows are small
-      width: dx == undefined ? 1 : 4,
-      height: dx == undefined ? 4 : 1,
+      width: coordinates.dx == 0 ? 1 : ARROW_LENGTH,
+      height: coordinates.dx == 0 ? ARROW_LENGTH : 1,
       color: 'beige'
     });
 
     sprites.push(this);
+  }
+
+  handleCollisions() {
+    let that = this;
+
+    COLLIDES_WITH_ARROW.forEach(function(layer) {
+      if (world.tileEngine.layerCollidesWith(layer, that.sprite) && that.isMoving()) {
+        that.sprite.ttl = 400;
+        that.sprite.dx = 0;
+        that.sprite.dy = 0;     
+      }
+    });
   }
 
   render() {
@@ -53,7 +45,49 @@ class Arrow {
   }
 
   update() {
+    this.savePreviousPosition();
+    this.handleCollisions();
     this.sprite.update();
+  }
+
+  savePreviousPosition() {
+    this.sprite.prevX = this.sprite.x;
+    this.sprite.prevY = this.sprite.y;
+  }
+
+  calculateShot() {
+    let coordinates = {x: 0, y:0, dx: 0, dy: 0};
+    switch(this.shooter.sprite.aim) {
+      case 'right':
+        coordinates.x = this.shooter.sprite.x + this.shooter.sprite.width;
+        coordinates.y = this.shooter.sprite.y + this.shooter.sprite.height/2;
+        coordinates.dx = ARROW_SPEED;
+        break;
+      case 'down': 
+        coordinates.x = this.shooter.sprite.x + this.shooter.sprite.width/2;
+        coordinates.y = this.shooter.sprite.y + this.shooter.sprite.height;
+        coordinates.dy = ARROW_SPEED;
+        break;
+      case 'left': 
+        coordinates.x = this.shooter.sprite.x - ARROW_LENGTH;
+        coordinates.y = this.shooter.sprite.y + this.shooter.sprite.height/2;
+        coordinates.dx = -ARROW_SPEED;
+        break;
+      case 'up': 
+        coordinates.x = this.shooter.sprite.x + this.shooter.sprite.width/2;
+        coordinates.y = this.shooter.sprite.y - ARROW_LENGTH;
+        coordinates.dy = -ARROW_SPEED;
+        break;
+    }
+    return coordinates;
+  }
+
+  isMoving() {
+    return this.sprite.dx != 0 || this.sprite.dy != 0;
+  }
+
+  isHurting(player) {
+    return this.isMoving() && player != shooter;
   }
 
   isAlive() {
