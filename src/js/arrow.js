@@ -18,7 +18,7 @@ class Arrow {
       dx: coordinates.dx,
       dy: coordinates.dy,
 
-      ttl: 60,
+      ttl: 100,
 
       width: coordinates.dx == 0 ? 1 : ARROW_LENGTH,
       height: coordinates.dx == 0 ? ARROW_LENGTH : 1,
@@ -33,11 +33,24 @@ class Arrow {
 
     COLLIDES_WITH_ARROW.forEach(function(layer) {
       if (world.tileEngine.layerCollidesWith(layer, that.sprite) && that.isMoving()) {
-        that.sprite.ttl = 400;
-        that.sprite.dx = 0;
-        that.sprite.dy = 0;     
+        that.stopMoving();
       }
     });
+
+    sprites
+      .filter(object => object.sprite.type == 'player')
+      .forEach(player => {
+        if (that.sprite.collidesWith(player.sprite) && that.isHurting(player)) {
+          player.die();
+          that.stopMoving();
+        }
+      });
+  }
+
+  stopMoving() {
+    this.sprite.ttl = 400;
+    this.sprite.dx = 0;
+    this.sprite.dy = 0;
   }
 
   render() {
@@ -87,7 +100,7 @@ class Arrow {
   }
 
   isHurting(player) {
-    return this.isMoving() && player != shooter;
+    return this.isMoving() && player != this.shooter;
   }
 
   isAlive() {

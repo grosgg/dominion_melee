@@ -19,6 +19,7 @@ const PLAYER_PRESETS = [
     images: {
       right: 'archer_red_right',
       left: 'archer_red_left',
+      dead: 'archer_red_dead',
     }
   }, {
     controls: {
@@ -33,6 +34,7 @@ const PLAYER_PRESETS = [
     images: {
       right: 'archer_blue_right',
       left: 'archer_blue_left',
+      dead: 'archer_blue_dead',
     }
   }
 ];
@@ -59,6 +61,8 @@ class Player {
       // delta time
       dtMove: 0,
       dtShoot: 0,
+
+      dead: false,
     });
     sprites.push(this);
   }
@@ -76,7 +80,7 @@ class Player {
   }
 
   move() {
-    if (this.sprite.dtMove < PLAYER_MOVE_DELAY) { return null; }
+    if (this.sprite.dtMove < PLAYER_MOVE_DELAY || this.sprite.dead) { return null; }
 
     if (kontra.keys.pressed(this.controls.down)) {
       this.sprite.y += PLAYER_SPEED;
@@ -117,12 +121,18 @@ class Player {
   }
 
   shoot() {
-    if (this.sprite.dtShoot < PLAYER_SHOOT_DELAY) { return null; }
+    if (this.sprite.dtShoot < PLAYER_SHOOT_DELAY || this.sprite.dead) { return null; }
 
     if (kontra.keys.pressed(this.controls.shoot)) {
       new Arrow(this);
       this.sprite.dtShoot = 0;
     }
+  }
+
+  die() {
+    this.sprite.image = kontra.assets.images[this.images.dead];
+    this.sprite.dead = true;
+    console.log(`Player ${this.id} died!`);
   }
 
   handleCollisions() {

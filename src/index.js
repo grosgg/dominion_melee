@@ -13,8 +13,10 @@ kontra.assets
     "luscious_grasslands.json",
     "archer_red_right.png",
     "archer_red_left.png",
+    "archer_red_dead.png",
     "archer_blue_right.png",
     "archer_blue_left.png",
+    "archer_blue_dead.png",
   )
   .then(() => {
     world = new World('luscious_grasslands');
