@@ -1,32 +1,30 @@
-const PLAYER_1_KEY_RIGHT = 'd';
-const PLAYER_1_KEY_DOWN = 's';
-const PLAYER_1_KEY_LEFT = 'a';
-const PLAYER_1_KEY_UP = 'w';
-const PLAYER_1_KEY_SHOOT = 'r';
-const PLAYER_1_KEY_STRAFE = 't';
+const PLAYER_SPEED = 1;
+const PLAYER_MOVE_DELAY = 0.05;
+const PLAYER_SHOOT_DELAY = 1;
 
-const PLAYER_SPEED = 2;
-const PLAYER_MOVE_DELAY = 0.1;
-const PLAYER_SHOOT_DELAY = 0.4;
+const COLLIDES_WITH_PLAYER = ['Water', 'Walls', 'Trees', 'Buildings'];
 
 class Player {
-  constructor() {
+  constructor(index, controls) {
+    console.log(`Creating player ${index}`);
+    this.controls = controls;
     this.sprite = kontra.sprite({
-      x: 30,
-      y: 20,
-
-      // ttl: 300,
+      x: 1,
+      y: 1,
+      prevX: 1,
+      prevY: 1,
+      type: 'player',
 
       // directions: right, down, left, up
-      direction: 'left',
+      direction: 'right',
 
       // delta time
       dtMove: 0,
       dtShoot: 0,
 
-      width: 8,
-      height: 8,
-      color: 'red'
+      width: 6,
+      height: 6,
+      color: 'blue'
     });
     sprites.push(this);
   }
@@ -36,6 +34,7 @@ class Player {
   }
 
   update() {
+    this.savePreviousPosition();
     this.move();
     this.shoot();
     this.timePasses();
@@ -45,39 +44,137 @@ class Player {
   move() {
     if (this.sprite.dtMove < PLAYER_MOVE_DELAY) { return null; }
 
-    if (kontra.keys.pressed(PLAYER_1_KEY_RIGHT)) {
+    if (kontra.keys.pressed(this.controls.right)) {
       this.sprite.x += PLAYER_SPEED;
-      this.changeDirection('right');
+      this.sprite.direction = 'right';
     }
-    if (kontra.keys.pressed(PLAYER_1_KEY_DOWN)) {
+    if (kontra.keys.pressed(this.controls.down)) {
       this.sprite.y += PLAYER_SPEED;
-      this.changeDirection('down');
+      this.sprite.direction = 'down';
     }
-    if (kontra.keys.pressed(PLAYER_1_KEY_LEFT)) {
+    if (kontra.keys.pressed(this.controls.left)) {
       this.sprite.x -= PLAYER_SPEED;
-      this.changeDirection('left');
+      this.sprite.direction = 'left';
     }
-    if (kontra.keys.pressed(PLAYER_1_KEY_UP)) {
+    if (kontra.keys.pressed(this.controls.up)) {
       this.sprite.y -= PLAYER_SPEED;
-      this.changeDirection('up');
+      this.sprite.direction = 'up';
     }
 
+    this.changeAim();
+
+    this.handleCollisions();
     this.stopOnMapEdge();
     this.sprite.dtMove = 0;
   }
 
-  changeDirection(direction) {
-    if (kontra.keys.pressed(PLAYER_1_KEY_STRAFE)) { return null; }
-    this.sprite.direction = direction;
+  changeAim() {
+    if (kontra.keys.pressed(this.controls.strafe)) { return null; }
+    this.sprite.aim = this.sprite.direction;    
   }
 
   shoot() {
     if (this.sprite.dtShoot < PLAYER_SHOOT_DELAY) { return null; }
 
-    if (kontra.keys.pressed(PLAYER_1_KEY_SHOOT)) {
+    if (kontra.keys.pressed(this.controls.shoot)) {
       new Arrow(this);
       this.sprite.dtShoot = 0;
     }
+  }
+
+  handleCollisions() {
+    let that = this;
+
+    COLLIDES_WITH_PLAYER.forEach(function(layer) {
+      ['upright', 'downright', 'downleft', 'upleft'].forEach(function(corner) {
+        if (world.isLayerCollidingInCorner(that, layer, corner)) {
+          that.handleSlide(corner, layer);
+        }
+      });
+    });
+  }
+
+  moveBack() {
+    this.sprite.x = this.sprite.prevX;
+    this.sprite.y = this.sprite.prevY;
+  }
+
+  handleSlide(corner, layer) {
+    let direction = this.movingDirection();
+    let position = {x: this.sprite.x, y: this.sprite.y};
+    // console.log('corner', corner);
+    // console.log('direction', direction);
+    
+    this.moveBack();
+    // Straight move don't slide
+    if (['right', 'down', 'left', 'up'].indexOf(direction) >= 0) { return null }
+
+    // Handle sliding against corners
+    if (corner == 'upright') {
+      switch(direction) {
+        case 'downright': this.sprite.y += PLAYER_SPEED; break;
+        case 'upleft': this.sprite.x -= PLAYER_SPEED; break;
+        case 'upright':
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width - 1, y: position.y })) {
+            this.sprite.x += PLAYER_SPEED;
+          }
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width, y: position.y + 1 })) {
+            this.sprite.y -= PLAYER_SPEED;
+          }
+          break;
+      }
+    }
+    if (corner == 'downright') {
+      switch(direction) {
+        case 'upright': this.sprite.y -= PLAYER_SPEED; break;
+        case 'downleft': this.sprite.x -= PLAYER_SPEED; break;
+        case 'downright': 
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width - 1, y: position.y + this.sprite.height })) {
+            this.sprite.x += PLAYER_SPEED;
+          }
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width, y: position.y + this.sprite.height - 1 })) {
+            this.sprite.y += PLAYER_SPEED;
+          }
+          break;
+      }
+    }
+    if (corner == 'downleft') {
+      switch(direction) {
+        case 'downright': this.sprite.x += PLAYER_SPEED; break;
+        case 'upleft': this.sprite.y -= PLAYER_SPEED; break;
+        case 'downleft':
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x + 1, y: position.y + this.sprite.height })) {
+            this.sprite.x -= PLAYER_SPEED;
+          }
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x, y: position.y + this.sprite.height - 1 })) {
+            this.sprite.y += PLAYER_SPEED;
+          }
+          break;
+      }
+    }
+    if (corner == 'upleft') {
+      switch(direction) {
+        case 'upright': this.sprite.x += PLAYER_SPEED; break;
+        case 'downleft': this.sprite.y += PLAYER_SPEED; break;
+        case 'upleft':
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x + 1, y: position.y })) {
+            this.sprite.x -= PLAYER_SPEED;
+          }
+          if (world.tileEngine.tileAtLayer(layer, { x: position.x, y: position.y + 1 })) {
+            this.sprite.y -= PLAYER_SPEED;
+          }
+          break;
+      }
+    }
+  }
+
+  movingDirection() {
+    let direction = '';
+    if (this.sprite.y < this.sprite.prevY) { direction = direction + 'up'; }
+    if (this.sprite.y > this.sprite.prevY) { direction = direction +  'down'; }
+    if (this.sprite.x > this.sprite.prevX) { direction = direction +  'right'; }
+    if (this.sprite.x < this.sprite.prevX) { direction = direction +  'left'; }
+    return direction;
   }
 
   stopOnMapEdge() {
@@ -102,6 +199,11 @@ class Player {
   timePasses() {
     this.sprite.dtMove += 1/60;
     this.sprite.dtShoot += 1/60;
+  }
+
+  savePreviousPosition() {
+    this.sprite.prevX = this.sprite.x;
+    this.sprite.prevY = this.sprite.y;
   }
 
   isAlive() {

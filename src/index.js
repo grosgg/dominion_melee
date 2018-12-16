@@ -1,8 +1,24 @@
+const PLAYER_1_KEYS = {
+  right: 'd',
+  down: 's',
+  left: 'a',
+  up: 'w',
+  shoot: 'r',
+  strafe: 't',
+};
+
+const PLAYER_2_KEYS = {
+  right: 'right',
+  down: 'down',
+  left: 'left',
+  up: 'up',
+  shoot: 'p',
+  strafe: 'o',
+};
+
 kontra.init();
 
-let tileEngine;
-let player;
-
+let world;
 let sprites = [];
 
 // Preload assets
@@ -17,20 +33,10 @@ kontra.assets
     "luscious_grasslands.json"
   )
   .then(() => {
-    loadWorld();
-    createPlayer();
+    world = new World('luscious_grasslands');
+    new Player(1, PLAYER_1_KEYS);
     loop.start(); // start the game
   });
-
-function loadWorld() {
-  console.log('Loading level');
-  tileEngine =  kontra.tileEngine(kontra.assets.data.luscious_grasslands);
-}
-
-function createPlayer() {
-  console.log('Creating player');
-  player = new Player();
-}
 
 const loop = kontra.gameLoop({
   // create the main game loop
@@ -41,7 +47,7 @@ const loop = kontra.gameLoop({
   },
   render: () => {
     // render the game state
-    tileEngine.render();
+    world.tileEngine.render();
     sprites.map(sprite => sprite.render());
   }
 });

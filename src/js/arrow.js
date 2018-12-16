@@ -1,9 +1,11 @@
-const ARROW_SPEED = 2;
+const ARROW_SPEED = 1;
+
+const COLLIDES_WITH_ARROW = ['Walls', 'Trees', 'Buildings'];
 
 class Arrow {
   constructor(shooter) {
     let x, y, dx, dy;
-    switch(shooter.sprite.direction) {
+    switch(shooter.sprite.aim) {
       case 'right':
         x = shooter.sprite.x + shooter.sprite.width;
         y = shooter.sprite.y + shooter.sprite.height/2;
@@ -27,15 +29,15 @@ class Arrow {
     }
 
     this.sprite = kontra.sprite({
-      type: 'arrow',
       x: x,
       y: y,
+      type: 'arrow',
 
       dx: dx || 0,
       dy: dy || 0,
 
       // live only for 2 sec
-      ttl: 40,
+      ttl: 50,
 
       // arrows are small
       width: dx == undefined ? 1 : 4,
