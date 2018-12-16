@@ -1,19 +1,57 @@
+const PLAYER_SIZE = 8;
 const PLAYER_SPEED = 1;
 const PLAYER_MOVE_DELAY = 0.05;
 const PLAYER_SHOOT_DELAY = 1;
 
 const COLLIDES_WITH_PLAYER = ['Water', 'Walls', 'Trees', 'Buildings'];
 
+const PLAYER_PRESETS = [
+  {
+    controls: {
+      right: 'd',
+      down: 's',
+      left: 'a',
+      up: 'w',
+      shoot: 'r',
+      strafe: 't',
+    },
+    position: { x: 0, y: 0 },
+    images: {
+      right: 'archer_red_right',
+      left: 'archer_red_left',
+    }
+  }, {
+    controls: {
+      right: 'right',
+      down: 'down',
+      left: 'left',
+      up: 'up',
+      shoot: 'p',
+      strafe: 'o',
+    },
+    position: { x: kontra.canvas.width - PLAYER_SIZE , y: kontra.canvas.height - PLAYER_SIZE },
+    images: {
+      right: 'archer_blue_right',
+      left: 'archer_blue_left',
+    }
+  }
+];
+
 class Player {
-  constructor(index, controls) {
-    console.log(`Creating player ${index}`);
-    this.controls = controls;
+  constructor(number) {
+    console.log(`Creating player ${number}`);
+    this.id = number;
+
+    this.controls = PLAYER_PRESETS[this.id].controls;
+    this.images = PLAYER_PRESETS[this.id].images;
+
     this.sprite = kontra.sprite({
-      x: 1,
-      y: 1,
-      prevX: 1,
-      prevY: 1,
+      x: PLAYER_PRESETS[this.id].position.x,
+      y: PLAYER_PRESETS[this.id].position.y,
+      prevX: PLAYER_PRESETS[this.id].position.x,
+      prevY: PLAYER_PRESETS[this.id].position.y,
       type: 'player',
+      image: kontra.assets.images[this.images.right],
 
       // directions: right, down, left, up
       direction: 'right',
@@ -21,10 +59,6 @@ class Player {
       // delta time
       dtMove: 0,
       dtShoot: 0,
-
-      width: 6,
-      height: 6,
-      color: 'blue'
     });
     sprites.push(this);
   }
@@ -44,25 +78,26 @@ class Player {
   move() {
     if (this.sprite.dtMove < PLAYER_MOVE_DELAY) { return null; }
 
-    if (kontra.keys.pressed(this.controls.right)) {
-      this.sprite.x += PLAYER_SPEED;
-      this.sprite.direction = 'right';
-    }
     if (kontra.keys.pressed(this.controls.down)) {
       this.sprite.y += PLAYER_SPEED;
       this.sprite.direction = 'down';
-    }
-    if (kontra.keys.pressed(this.controls.left)) {
-      this.sprite.x -= PLAYER_SPEED;
-      this.sprite.direction = 'left';
     }
     if (kontra.keys.pressed(this.controls.up)) {
       this.sprite.y -= PLAYER_SPEED;
       this.sprite.direction = 'up';
     }
 
-    this.changeAim();
+    // Direction priority for left and right
+    if (kontra.keys.pressed(this.controls.right)) {
+      this.sprite.x += PLAYER_SPEED;
+      this.sprite.direction = 'right';
+    }
+    if (kontra.keys.pressed(this.controls.left)) {
+      this.sprite.x -= PLAYER_SPEED;
+      this.sprite.direction = 'left';
+    }
 
+    this.changeAim();
     this.handleCollisions();
     this.stopOnMapEdge();
     this.sprite.dtMove = 0;
@@ -70,7 +105,15 @@ class Player {
 
   changeAim() {
     if (kontra.keys.pressed(this.controls.strafe)) { return null; }
-    this.sprite.aim = this.sprite.direction;    
+    this.sprite.aim = this.sprite.direction;
+
+    if (this.sprite.aim == 'left') {
+      this.sprite.image = kontra.assets.images[this.images.left];
+    }
+    if (this.sprite.aim == 'right') {
+      this.sprite.image = kontra.assets.images[this.images.right];
+    }
+    
   }
 
   shoot() {
@@ -115,10 +158,20 @@ class Player {
         case 'downright': this.sprite.y += PLAYER_SPEED; break;
         case 'upleft': this.sprite.x -= PLAYER_SPEED; break;
         case 'upright':
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width - 1, y: position.y })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            // position - collision_offset + width - next pixel
+            x: position.x - 1 + this.sprite.width - 1,
+            // position + height
+            y: position.y
+          })) {
             this.sprite.x += PLAYER_SPEED;
           }
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width, y: position.y + 1 })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            // position - collision_offset + width
+            x: position.x - 1 + this.sprite.width,
+            // position + next pixel
+            y: position.y + 1
+          })) {
             this.sprite.y -= PLAYER_SPEED;
           }
           break;
@@ -129,10 +182,19 @@ class Player {
         case 'upright': this.sprite.y -= PLAYER_SPEED; break;
         case 'downleft': this.sprite.x -= PLAYER_SPEED; break;
         case 'downright': 
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width - 1, y: position.y + this.sprite.height })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            // position - collision_offset + width - next pixel
+            x: position.x - 1 + this.sprite.width - 1,
+            // position - collision_offset + height
+            y: position.y - 1 + this.sprite.height
+          })) {
             this.sprite.x += PLAYER_SPEED;
           }
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x + this.sprite.width, y: position.y + this.sprite.height - 1 })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            // position - collision_offset + width
+            x: position.x - 1 + this.sprite.width,
+            // position - collision_offset + height - next pixel
+            y: position.y - 1 + this.sprite.height - 1 })) {
             this.sprite.y += PLAYER_SPEED;
           }
           break;
@@ -143,10 +205,19 @@ class Player {
         case 'downright': this.sprite.x += PLAYER_SPEED; break;
         case 'upleft': this.sprite.y -= PLAYER_SPEED; break;
         case 'downleft':
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x + 1, y: position.y + this.sprite.height })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            // position + next pixel
+            x: position.x + 1,
+            // position - collision_offset + height
+            y: position.y - 1 + this.sprite.height
+          })) {
             this.sprite.x -= PLAYER_SPEED;
           }
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x, y: position.y + this.sprite.height - 1 })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            x: position.x,
+            // position - collision_offset + height - next pixel
+            y: position.y - 1 + this.sprite.height - 1
+          })) {
             this.sprite.y += PLAYER_SPEED;
           }
           break;
@@ -157,10 +228,18 @@ class Player {
         case 'upright': this.sprite.x += PLAYER_SPEED; break;
         case 'downleft': this.sprite.y += PLAYER_SPEED; break;
         case 'upleft':
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x + 1, y: position.y })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            // position + next pixel
+            x: position.x + 1,
+            y: position.y
+          })) {
             this.sprite.x -= PLAYER_SPEED;
           }
-          if (world.tileEngine.tileAtLayer(layer, { x: position.x, y: position.y + 1 })) {
+          if (world.tileEngine.tileAtLayer(layer, {
+            x: position.x,
+            // position + next pixel
+            y: position.y + 1
+          })) {
             this.sprite.y -= PLAYER_SPEED;
           }
           break;

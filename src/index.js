@@ -1,40 +1,25 @@
-const PLAYER_1_KEYS = {
-  right: 'd',
-  down: 's',
-  left: 'a',
-  up: 'w',
-  shoot: 'r',
-  strafe: 't',
-};
-
-const PLAYER_2_KEYS = {
-  right: 'right',
-  down: 'down',
-  left: 'left',
-  up: 'up',
-  shoot: 'p',
-  strafe: 'o',
-};
-
 kontra.init();
 
 let world;
 let sprites = [];
 
 // Preload assets
-kontra.assets.imagePath = "img";
 kontra.assets.dataPath = "data";
+kontra.assets.imagePath = "img";
 kontra.assets
   .load(
     "world.png",
-    "main.png",
     "world.json",
-    "main.json",
-    "luscious_grasslands.json"
+    "luscious_grasslands.json",
+    "archer_red_right.png",
+    "archer_red_left.png",
+    "archer_blue_right.png",
+    "archer_blue_left.png",
   )
   .then(() => {
     world = new World('luscious_grasslands');
-    new Player(1, PLAYER_1_KEYS);
+    new Player(0);
+    new Player(1);
     loop.start(); // start the game
   });
 

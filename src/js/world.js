@@ -6,10 +6,22 @@ class World {
 
   isLayerCollidingInCorner(object, layer, corner) {
     switch (corner) {
-      case 'upright': return !!this.tileEngine.tileAtLayer(layer, {x: object.sprite.x + object.sprite.width, y: object.sprite.y});
-      case 'downright': return !!this.tileEngine.tileAtLayer(layer, {x: object.sprite.x + object.sprite.width, y: object.sprite.y + object.sprite.height});
-      case 'downleft': return !!this.tileEngine.tileAtLayer(layer, {x: object.sprite.x, y: object.sprite.y + object.sprite.height});
-      case 'upleft': return !!this.tileEngine.tileAtLayer(layer, {x: object.sprite.x, y: object.sprite.y});
+      case 'upright':
+        return !!this.tileEngine.tileAtLayer(layer, {
+          x: object.sprite.x + object.sprite.width - 1, y: object.sprite.y
+        });
+      case 'downright':
+        return !!this.tileEngine.tileAtLayer(layer, {
+          x: object.sprite.x + object.sprite.width - 1, y: object.sprite.y + object.sprite.height - 1
+        });
+      case 'downleft':
+        return !!this.tileEngine.tileAtLayer(layer, {
+          x: object.sprite.x, y: object.sprite.y + object.sprite.height - 1
+        });
+      case 'upleft':
+        return !!this.tileEngine.tileAtLayer(layer, {
+          x: object.sprite.x, y: object.sprite.y
+        });
     }
   }
 
