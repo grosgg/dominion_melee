@@ -1,7 +1,7 @@
 const PLAYER_SIZE = 8;
 const PLAYER_SPEED = 1;
-const PLAYER_MOVE_DELAY = 0.05;
-const PLAYER_SHOOT_DELAY = 1;
+const PLAYER_MOVE_DELAY = 0.02;
+const PLAYER_SHOOT_DELAY = 0.4;
 
 const COLLIDES_WITH_PLAYER = ['Water', 'Walls', 'Trees', 'Buildings'];
 
@@ -132,6 +132,7 @@ class Player {
   die() {
     this.sprite.image = kontra.assets.images[this.images.dead];
     this.sprite.dead = true;
+    playDieSound();
     console.log(`Player ${this.id} died!`);
   }
 

@@ -1,4 +1,4 @@
-const ARROW_SPEED = 1;
+const ARROW_SPEED = 2;
 const ARROW_LENGTH = 5
 
 const COLLIDES_WITH_ARROW = ['Walls', 'Trees', 'Buildings'];
@@ -7,6 +7,7 @@ class Arrow {
   constructor(shooter) {
     this.shooter = shooter
     let coordinates = this.calculateShot();
+    playShootSound();
 
     this.sprite = kontra.sprite({
       x: coordinates.x,
@@ -34,6 +35,7 @@ class Arrow {
     COLLIDES_WITH_ARROW.forEach(function(layer) {
       if (world.tileEngine.layerCollidesWith(layer, that.sprite) && that.isMoving()) {
         that.stopMoving();
+        playHitWallSound();
       }
     });
 
