@@ -1,7 +1,7 @@
 const ARROW_SPEED = 2;
 const ARROW_LENGTH = 5
 
-const COLLIDES_WITH_ARROW = ['Walls', 'Trees', 'Buildings'];
+const COLLIDES_WITH_ARROW = ['Walls', 'Mountains', 'Trees', 'Buildings'];
 
 class Arrow {
   constructor(shooter) {
