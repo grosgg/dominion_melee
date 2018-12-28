@@ -3,7 +3,7 @@ const PLAYER_SPEED = 1;
 const PLAYER_MOVE_DELAY = 0.02;
 const PLAYER_SHOOT_DELAY = 0.4;
 
-const COLLIDES_WITH_PLAYER = ['Water', 'Walls', 'Mountains', 'Trees', 'Buildings'];
+const COLLIDES_WITH_PLAYER = ['Menu', 'Water', 'Walls', 'Mountains', 'Trees', 'Buildings'];
 
 const PLAYER_PRESETS = [
   {
@@ -15,7 +15,7 @@ const PLAYER_PRESETS = [
       shoot: 'r',
       strafe: 't',
     },
-    position: { x: 0, y: 0 },
+    position: { x: TILE_SIZE, y: 0 },
     images: {
       right: 'archer_red_right',
       left: 'archer_red_left',
@@ -30,7 +30,7 @@ const PLAYER_PRESETS = [
       shoot: 'p',
       strafe: 'o',
     },
-    position: { x: kontra.canvas.width - PLAYER_SIZE , y: kontra.canvas.height - PLAYER_SIZE },
+    position: { x: kontra.canvas.width - PLAYER_SIZE - TILE_SIZE , y: kontra.canvas.height - PLAYER_SIZE },
     images: {
       right: 'archer_blue_right',
       left: 'archer_blue_left',

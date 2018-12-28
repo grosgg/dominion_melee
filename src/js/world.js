@@ -1,3 +1,5 @@
+const TILE_SIZE = 8;
+
 class World {
   constructor(levelName) {
     console.log(`Loading level ${levelName}`);
