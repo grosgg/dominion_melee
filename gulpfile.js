@@ -67,7 +67,7 @@ gulp.task('zip', () => {
     .pipe(deleteFiles());
 
   return gulp.src(`${paths.dist.dir}/**`)
-    .pipe(zip('game.zip'))
+    .pipe(zip('dominion-melee.zip'))
     .pipe(gulp.dest('zip'))
     .pipe(size())
 });
