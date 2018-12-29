@@ -30,11 +30,9 @@ class Arrow {
   }
 
   handleCollisions() {
-    let that = this;
-
-    COLLIDES_WITH_ARROW.forEach(function(layer) {
-      if (world.tileEngine.layerCollidesWith(layer, that.sprite) && that.isMoving()) {
-        that.stopMoving();
+    COLLIDES_WITH_ARROW.forEach(layer => {
+      if (world.tileEngine.layerCollidesWith(layer, this.sprite) && this.isMoving()) {
+        this.stopMoving();
         playHitWallSound();
       }
     });
@@ -42,9 +40,9 @@ class Arrow {
     sprites
       .filter(object => object.sprite.type == 'player')
       .forEach(player => {
-        if (that.sprite.collidesWith(player.sprite) && that.isHurting(player)) {
+        if (this.sprite.collidesWith(player.sprite) && this.isHurting(player)) {
           player.hit();
-          that.stopMoving();
+          this.stopMoving();
         }
       });
   }

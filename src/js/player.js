@@ -146,12 +146,11 @@ class Player {
   }
 
   handleCollisions() {
-    let that = this;
 
-    COLLIDES_WITH_PLAYER.forEach(function(layer) {
-      ['upright', 'downright', 'downleft', 'upleft'].forEach(function(corner) {
-        if (world.isLayerCollidingInCorner(that, layer, corner)) {
-          that.handleSlide(corner, layer);
+    COLLIDES_WITH_PLAYER.forEach(layer => {
+      ['upright', 'downright', 'downleft', 'upleft'].forEach(corner => {
+        if (world.isLayerCollidingInCorner(this, layer, corner)) {
+          this.handleSlide(corner, layer);
         }
       });
     });
