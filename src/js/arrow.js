@@ -43,7 +43,7 @@ class Arrow {
       .filter(object => object.sprite.type == 'player')
       .forEach(player => {
         if (that.sprite.collidesWith(player.sprite) && that.isHurting(player)) {
-          player.die();
+          player.hit();
           that.stopMoving();
         }
       });

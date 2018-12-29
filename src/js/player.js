@@ -2,8 +2,9 @@ const PLAYER_SIZE = 8;
 const PLAYER_SPEED = 1;
 const PLAYER_MOVE_DELAY = 0.02;
 const PLAYER_SHOOT_DELAY = 0.4;
+const PLAYER_MAX_HEALTH = 3;
 
-const COLLIDES_WITH_PLAYER = ['Menu', 'Water', 'Walls', 'Mountains', 'Trees', 'Buildings'];
+const COLLIDES_WITH_PLAYER = ['Water', 'Walls', 'Mountains', 'Trees', 'Buildings'];
 
 const PLAYER_PRESETS = [
   {
@@ -46,6 +47,7 @@ class Player {
 
     this.controls = PLAYER_PRESETS[this.id].controls;
     this.images = PLAYER_PRESETS[this.id].images;
+    this.status = new Status(this);
 
     this.sprite = kontra.sprite({
       x: PLAYER_PRESETS[this.id].position.x,
@@ -126,6 +128,13 @@ class Player {
     if (kontra.keys.pressed(this.controls.shoot)) {
       new Arrow(this);
       this.sprite.dtShoot = 0;
+    }
+  }
+
+  hit() {
+    this.status.removeHeart();
+    if (this.status.hearts.length < 1) {
+      this.die();
     }
   }
 
@@ -269,16 +278,16 @@ class Player {
 
   stopOnMapEdge() {
     // right edge
-    if (this.sprite.x > kontra.canvas.width - this.sprite.width) {
-      this.sprite.x = kontra.canvas.width - this.sprite.width;
+    if (this.sprite.x > kontra.canvas.width - this.sprite.width - TILE_SIZE) {
+      this.sprite.x = kontra.canvas.width - this.sprite.width - TILE_SIZE;
     }
     // down edge
     if (this.sprite.y > kontra.canvas.height - this.sprite.height) {
       this.sprite.y = kontra.canvas.height - this.sprite.height;
     }
     // left edge
-    if (this.sprite.x < 0) {
-      this.sprite.x = 0;
+    if (this.sprite.x < TILE_SIZE) {
+      this.sprite.x = TILE_SIZE;
     }
     // up edge
     if (this.sprite.y < 0) {

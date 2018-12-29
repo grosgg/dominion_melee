@@ -17,11 +17,12 @@ kontra.assets
     "archer_blue_right.png",
     "archer_blue_left.png",
     "archer_blue_dead.png",
+    "heart.png",
   )
   .then(() => {
-    world = new World('luscious_grasslands');
     new Player(0);
     new Player(1);
+    world = new World('luscious_grasslands');
     loop.start(); // start the game
   });
 
