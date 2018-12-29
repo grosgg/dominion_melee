@@ -15,6 +15,7 @@ class Arrow {
       prevX: coordinates.x,
       prevY: coordinates.y,
       type: 'arrow',
+      stuck: false,
 
       dx: coordinates.dx,
       dy: coordinates.dy,
@@ -32,8 +33,7 @@ class Arrow {
   handleCollisions() {
     COLLIDES_WITH_ARROW.forEach(layer => {
       if (world.tileEngine.layerCollidesWith(layer, this.sprite) && this.isMoving()) {
-        this.stopMoving();
-        playHitWallSound();
+        this.hitObstacle();
       }
     });
 
@@ -42,15 +42,23 @@ class Arrow {
       .forEach(player => {
         if (this.sprite.collidesWith(player.sprite) && this.isHurting(player)) {
           player.hit();
-          this.stopMoving();
+          this.hitPlayer();
         }
       });
   }
 
-  stopMoving() {
+  hitObstacle() {
     this.sprite.ttl = 400;
     this.sprite.dx = 0;
     this.sprite.dy = 0;
+    playHitWallSound();
+  }
+
+  hitPlayer() {
+    this.sprite.ttl = 10;
+    this.sprite.dx = 0;
+    this.sprite.dy = 0;
+    playHitWallSound();
   }
 
   render() {

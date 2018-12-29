@@ -63,8 +63,6 @@ class Player {
       // delta time
       dtMove: 0,
       dtShoot: 0,
-
-      dead: false,
     });
     sprites.push(this);
   }
@@ -82,7 +80,7 @@ class Player {
   }
 
   move() {
-    if (this.sprite.dtMove < PLAYER_MOVE_DELAY || this.sprite.dead) { return null; }
+    if (this.sprite.dtMove < PLAYER_MOVE_DELAY || this.status.isDead()) { return null; }
 
     if (kontra.keys.pressed(this.controls.down)) {
       this.sprite.y += PLAYER_SPEED;
@@ -123,7 +121,7 @@ class Player {
   }
 
   shoot() {
-    if (this.sprite.dtShoot < PLAYER_SHOOT_DELAY || this.sprite.dead) { return null; }
+    if (this.sprite.dtShoot < PLAYER_SHOOT_DELAY || this.status.isDead()) { return null; }
 
     if (kontra.keys.pressed(this.controls.shoot)) {
       new Arrow(this);
@@ -132,15 +130,14 @@ class Player {
   }
 
   hit() {
+    if (this.status.isDead()) { return }
+
     this.status.removeHeart();
-    if (this.status.hearts.length < 1) {
-      this.die();
-    }
+    if (this.status.isDead()) { this.die() }
   }
 
   die() {
     this.sprite.image = kontra.assets.images[this.images.dead];
-    this.sprite.dead = true;
     playDieSound();
     console.log(`Player ${this.id} died!`);
   }

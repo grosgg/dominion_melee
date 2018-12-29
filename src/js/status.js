@@ -13,8 +13,13 @@ class Status {
   }
 
   removeHeart() {
+    if (this.hearts.length < 1) { return }
     const heart = this.hearts.pop();
     sprites.find((sprite) => sprite == heart).sprite.ttl = 0;
+  }
+
+  isDead() {
+    return (this.hearts.length < 1);
   }
 
 }
