@@ -2,8 +2,8 @@ const SELECTOR_MOVE_DELAY = 0.15;
 
 const MENU_POSITIONS = [
   { name: 'luscious_grasslands', x: 5*TILE_SIZE, y: 12*TILE_SIZE },
-  { name: 'luscious_grasslands', x: 5*TILE_SIZE, y: 14*TILE_SIZE },
-  { name: 'luscious_grasslands', x: 5*TILE_SIZE, y: 16*TILE_SIZE },
+  { name: 'plains_and_mountains', x: 5*TILE_SIZE, y: 14*TILE_SIZE },
+  { name: 'medieval_town', x: 5*TILE_SIZE, y: 16*TILE_SIZE },
 ];
 
 class MenuSelector {

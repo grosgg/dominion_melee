@@ -17,6 +17,8 @@ kontra.assets
     // Maps
     "menu.json",
     "luscious_grasslands.json",
+    "plains_and_mountains.json",
+    "medieval_town.json",
     // Sprites
     "archer_red_right.png",
     "archer_red_left.png",
