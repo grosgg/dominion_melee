@@ -27,6 +27,7 @@ kontra.assets
     "heart.png",
   )
   .then(() => {
+    kontra.keys.bind('esc', () => { loadMenu() });
     loadMenu();
     loop.start(); // start the game
   });
@@ -48,9 +49,7 @@ const loop = kontra.gameLoop({
 function loadMenu() {
   sprites = [];
   world = new World('menu');
-
-  kontra.keys.bind('esc', () => { loadMenu() });
-  kontra.keys.bind('q', () => { loadMap('luscious_grasslands') });
+  new MenuSelector();
 }
 
 function loadMap(map) {
@@ -59,5 +58,5 @@ function loadMap(map) {
   new Player(1);
   world = new World(map);
 
-  kontra.keys.unbind(['q', 'w', 'e', 'r']);
+  kontra.keys.unbind(['up', 'down', 'space']);
 }

@@ -2,7 +2,7 @@ const PLAYER_SIZE = 8;
 const PLAYER_SPEED = 1;
 const PLAYER_MOVE_DELAY = 0.02;
 const PLAYER_SHOOT_DELAY = 0.4;
-const PLAYER_MAX_HEALTH = 10;
+const PLAYER_MAX_HEALTH = 3;
 
 const COLLIDES_WITH_PLAYER = ['Water', 'Walls', 'Mountains', 'Trees', 'Buildings'];
 
@@ -24,12 +24,12 @@ const PLAYER_PRESETS = [
     }
   }, {
     controls: {
-      right: 'right',
-      down: 'down',
-      left: 'left',
-      up: 'up',
-      shoot: 'p',
-      strafe: 'o',
+      right: 'k',
+      down: 'j',
+      left: 'h',
+      up: 'u',
+      shoot: 'o',
+      strafe: 'p',
     },
     position: { x: kontra.canvas.width - PLAYER_SIZE - TILE_SIZE , y: kontra.canvas.height - PLAYER_SIZE },
     images: {
@@ -140,6 +140,7 @@ class Player {
     this.sprite.image = kontra.assets.images[this.images.dead];
     playDieSound();
     console.log(`Player ${this.id} died!`);
+    setTimeout(() => { loadMenu(); }, 3000);
   }
 
   handleCollisions() {
