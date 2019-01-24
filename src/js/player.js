@@ -2,7 +2,7 @@ const PLAYER_SIZE = 8;
 const PLAYER_SPEED = 1;
 const PLAYER_MOVE_DELAY = 0.02;
 const PLAYER_SHOOT_DELAY = 0.4;
-const PLAYER_MAX_HEALTH = 3;
+const PLAYER_MAX_HEALTH = 10;
 
 const COLLIDES_WITH_PLAYER = ['Water', 'Walls', 'Mountains', 'Trees', 'Buildings'];
 

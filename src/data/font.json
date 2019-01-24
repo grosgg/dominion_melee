@@ -1,0 +1,15 @@
+{ "columns":16,
+ "image":"..\/img\/font.png",
+ "imageheight":128,
+ "imagewidth":128,
+ "margin":0,
+ "name":"font",
+ "spacing":0,
+ "tilecount":256,
+ "tiledversion":"1.2.1",
+ "tileheight":8,
+ "tilewidth":8,
+ "transparentcolor":"#ff00ff",
+ "type":"tileset",
+ "version":1.2
+}

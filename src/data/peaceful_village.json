@@ -82,7 +82,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"world.tsx"
+         "source":"world.json"
         }],
  "tilewidth":8,
  "type":"map",

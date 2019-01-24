@@ -1,6 +1,7 @@
 kontra.init();
 
-let world;
+let scene = 'menu';
+let world = null;
 let sprites = [];
 
 // Preload assets
@@ -8,9 +9,15 @@ kontra.assets.dataPath = "data";
 kontra.assets.imagePath = "img";
 kontra.assets
   .load(
+    // Tilesets
+    "font.png",
+    "font.json",
     "world.png",
     "world.json",
+    // Maps
+    "menu.json",
     "luscious_grasslands.json",
+    // Sprites
     "archer_red_right.png",
     "archer_red_left.png",
     "archer_red_dead.png",
@@ -20,9 +27,7 @@ kontra.assets
     "heart.png",
   )
   .then(() => {
-    new Player(0);
-    new Player(1);
-    world = new World('luscious_grasslands');
+    loadMenu();
     loop.start(); // start the game
   });
 
@@ -35,11 +40,24 @@ const loop = kontra.gameLoop({
   },
   render: () => {
     // render the game state
-    world.tileEngine.render();
+    if (world) {world.tileEngine.render()};
     sprites.map(sprite => sprite.render());
   }
 });
 
+function loadMenu() {
+  sprites = [];
+  world = new World('menu');
 
+  kontra.keys.bind('esc', () => { loadMenu() });
+  kontra.keys.bind('q', () => { loadMap('luscious_grasslands') });
+}
 
+function loadMap(map) {
+  sprites = [];
+  new Player(0);
+  new Player(1);
+  world = new World(map);
 
+  kontra.keys.unbind(['q', 'w', 'e', 'r']);
+}
