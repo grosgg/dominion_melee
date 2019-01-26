@@ -65,3 +65,35 @@ potionSequence.loop = false;
 function playPotionSound() {
   potionSequence.play( ac.currentTime );
 }
+
+const startSound = [
+  'D3 q',
+  'B3 q',
+  'A3 h',
+];
+
+let startSequence = new TinyMusic.Sequence( ac, 600, startSound );
+
+startSequence.staccato = 0.1;
+startSequence.smoothing = 0;
+startSequence.gain.gain.value = 0.8;
+startSequence.loop = false;
+
+function playStartSound() {
+  startSequence.play( ac.currentTime );
+}
+
+const selectSound = [
+  'A4 e',
+];
+
+let selectSequence = new TinyMusic.Sequence( ac, 600, selectSound );
+
+selectSequence.staccato = 0.1;
+selectSequence.smoothing = 0;
+selectSequence.gain.gain.value = 0.8;
+selectSequence.loop = false;
+
+function playSelectSound() {
+  selectSequence.play( ac.currentTime );
+}

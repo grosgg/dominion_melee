@@ -41,8 +41,11 @@ class MenuSelector {
     } else if (kontra.keys.pressed(PLAYER_PRESETS[0].controls.up)) {
       this.sprite.index -= 1;
       if (this.sprite.index === -1) { this.sprite.index = MENU_POSITIONS.length - 1; }
+    } else {
+      return;
     }
 
+    playSelectSound();
     this.sprite.x = MENU_POSITIONS[this.sprite.index].x;
     this.sprite.y = MENU_POSITIONS[this.sprite.index].y;
     this.sprite.dtMove = 0;
@@ -50,7 +53,6 @@ class MenuSelector {
 
   select() {
     if (kontra.keys.pressed(PLAYER_PRESETS[0].controls.shoot)) {
-      playShootSound();
       loadMap(MENU_POSITIONS[this.sprite.index].name);
     };
   }

@@ -64,6 +64,7 @@ function loadMap(map) {
   new Player(1);
   world = new World(map);
   bonusSpawner = setInterval(() => { new Bonus(); }, BONUS_SPAWN_INTERVAL);
+  playStartSound();
 
   kontra.keys.unbind([
     PLAYER_PRESETS[0].controls.up,
