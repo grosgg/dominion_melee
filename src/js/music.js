@@ -50,3 +50,18 @@ function playDieSound() {
   dieSequence.play( ac.currentTime );
 }
 
+const potionSound = [
+  'A6 q',
+  'B0 q'
+];
+
+let potionSequence = new TinyMusic.Sequence( ac, 600, potionSound );
+
+potionSequence.staccato = 0.15;
+potionSequence.smoothing = 1;
+potionSequence.gain.gain.value = 0.8;
+potionSequence.loop = false;
+
+function playPotionSound() {
+  potionSequence.play( ac.currentTime );
+}

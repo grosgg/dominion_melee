@@ -57,6 +57,7 @@ class Bonus {
 
   affect(player) {
     console.log(`Affecting player ${player.id}`);
+    playPotionSound();
     this.sprite.ttl = 0;
 
     switch(this.bonusType) {
