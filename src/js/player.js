@@ -48,6 +48,7 @@ class Player {
     this.controls = PLAYER_PRESETS[this.id].controls;
     this.images = PLAYER_PRESETS[this.id].images;
     this.status = new Status(this);
+    this.shootingSpeed = PLAYER_SHOOT_DELAY;
 
     this.sprite = kontra.sprite({
       x: PLAYER_PRESETS[this.id].position.x,
@@ -121,7 +122,7 @@ class Player {
   }
 
   shoot() {
-    if (this.sprite.dtShoot < PLAYER_SHOOT_DELAY || this.status.isDead()) { return null; }
+    if (this.sprite.dtShoot < this.shootingSpeed || this.status.isDead()) { return null; }
 
     if (kontra.keys.pressed(this.controls.shoot)) {
       new Arrow(this);

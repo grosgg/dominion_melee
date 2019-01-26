@@ -29,6 +29,7 @@ kontra.assets
     "archer_blue_dead.png",
     "heart.png",
     "red_potion.png",
+    "blue_potion.png",
   )
   .then(() => {
     kontra.keys.bind('esc', () => { loadMenu() });

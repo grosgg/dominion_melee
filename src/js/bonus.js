@@ -1,6 +1,7 @@
 // TODO: Add more bonus types
 const BONUS_CHANCE = [
   'red_potion',
+  'blue_potion',
 ];
 
 const BONUS_SPAWN_INTERVAL = 10000;
@@ -8,13 +9,13 @@ const COLLIDES_WITH_BONUS = ['Water', 'Walls', 'Mountains', 'Trees', 'Buildings'
 
 class Bonus {
   constructor() {
-    this.bonusType = BONUS_CHANCE[0];
+    this.bonusType = BONUS_CHANCE[Math.floor(Math.random() * BONUS_CHANCE.length)];
 
     let tile;
     let spotFound = false;
 
     while (!spotFound) {
-      tile = getRandomTile();
+      tile = world.getRandomTile();
       spotFound = true;
 
       COLLIDES_WITH_BONUS.forEach(layer => {
@@ -24,7 +25,7 @@ class Bonus {
       });
     }
 
-    console.log('New bonus');
+    console.log(`New bonus: ${this.bonusType}`);
     this.sprite = kontra.sprite({
       x: tile.x,
       y: tile.y,
@@ -60,6 +61,7 @@ class Bonus {
 
     switch(this.bonusType) {
       case 'red_potion': player.status.addHeart(); break;
+      case 'blue_potion': player.status.shootUp(); break;
     }
   }
 }
