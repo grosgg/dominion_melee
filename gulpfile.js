@@ -12,7 +12,17 @@ const size = require('gulp-size');
 const paths = {
   src: {
       html: 'src/index.html',
-      js: 'src/js/**.js',
+      js: [
+        'src/js/fullscreen.js',
+        'src/js/music.js',
+        'src/js/game.js',
+        'src/js/world.js',
+        'src/js/menu_selector.js',
+        'src/js/player.js',
+        'src/js/arrow.js',
+        'src/js/status.js',
+        'src/js/heart.js',
+      ],
       lib: 'src',
       json: 'src/data/**.json',
       img: 'src/img/**'
@@ -20,6 +30,7 @@ const paths = {
   dist: {
       dir: 'dist',
       js: 'script.min.js',
+      json: 'dist/data',
       img: 'dist/img'
   }
 };
@@ -41,7 +52,7 @@ gulp.task('buildHTML', () => {
 gulp.task('buildJSON', () => {
   return gulp.src(paths.src.json)
     .pipe(minifyJSON())
-    .pipe(gulp.dest(paths.dist.dir));
+    .pipe(gulp.dest(paths.dist.json));
 });
 
 gulp.task('buildJS', () => {
