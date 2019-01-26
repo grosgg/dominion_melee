@@ -35,10 +35,10 @@ class MenuSelector {
   move() {
     if (this.sprite.dtMove < SELECTOR_MOVE_DELAY) { return null; }
 
-    if (kontra.keys.pressed('down')) {
+    if (kontra.keys.pressed(PLAYER_PRESETS[0].controls.down)) {
       this.sprite.index += 1;
       if (this.sprite.index === MENU_POSITIONS.length) { this.sprite.index = 0; }
-    } else if (kontra.keys.pressed('up')) {
+    } else if (kontra.keys.pressed(PLAYER_PRESETS[0].controls.up)) {
       this.sprite.index -= 1;
       if (this.sprite.index === -1) { this.sprite.index = MENU_POSITIONS.length - 1; }
     }
@@ -49,7 +49,7 @@ class MenuSelector {
   }
 
   select() {
-    if (kontra.keys.pressed('space')) {
+    if (kontra.keys.pressed(PLAYER_PRESETS[0].controls.shoot)) {
       playShootSound();
       loadMap(MENU_POSITIONS[this.sprite.index].name);
     };

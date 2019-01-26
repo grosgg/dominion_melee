@@ -60,5 +60,9 @@ function loadMap(map) {
   new Player(1);
   world = new World(map);
 
-  kontra.keys.unbind(['up', 'down', 'space']);
+  kontra.keys.unbind([
+    PLAYER_PRESETS[0].controls.up,
+    PLAYER_PRESETS[0].controls.down,
+    PLAYER_PRESETS[0].controls.shoot,
+  ]);
 }
