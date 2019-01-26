@@ -3,6 +3,7 @@ kontra.init();
 let scene = 'menu';
 let world = null;
 let sprites = [];
+let bonusSpawner = null;
 
 // Preload assets
 kontra.assets.dataPath = "data";
@@ -27,6 +28,7 @@ kontra.assets
     "archer_blue_left.png",
     "archer_blue_dead.png",
     "heart.png",
+    "red_potion.png",
   )
   .then(() => {
     kontra.keys.bind('esc', () => { loadMenu() });
@@ -52,6 +54,7 @@ function loadMenu() {
   sprites = [];
   world = new World('menu');
   new MenuSelector();
+  clearInterval(bonusSpawner);
 }
 
 function loadMap(map) {
@@ -59,6 +62,7 @@ function loadMap(map) {
   new Player(0);
   new Player(1);
   world = new World(map);
+  bonusSpawner = setInterval(() => { new Bonus(); }, BONUS_SPAWN_INTERVAL);
 
   kontra.keys.unbind([
     PLAYER_PRESETS[0].controls.up,

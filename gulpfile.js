@@ -22,6 +22,7 @@ const paths = {
         'src/js/arrow.js',
         'src/js/status.js',
         'src/js/heart.js',
+        'src/js/bonus.js',
       ],
       lib: 'src',
       json: 'src/data/**.json',

@@ -1,4 +1,8 @@
 const TILE_SIZE = 8;
+const FIRST_PLAYABLE_TILE_X = 1;
+const LAST_PLAYABLE_TILE_X = 30;
+const FIRST_PLAYABLE_TILE_Y = 0;
+const LAST_PLAYABLE_TILE_Y = 19;
 
 class World {
   constructor(levelName) {
@@ -27,4 +31,11 @@ class World {
     }
   }
 
+}
+
+function getRandomTile() {
+  return({
+    x: (Math.floor(Math.random() * (LAST_PLAYABLE_TILE_X - FIRST_PLAYABLE_TILE_X + 1)) + FIRST_PLAYABLE_TILE_X) * TILE_SIZE,
+    y: (Math.floor(Math.random() * (LAST_PLAYABLE_TILE_Y - FIRST_PLAYABLE_TILE_Y + 1)) + FIRST_PLAYABLE_TILE_Y) * TILE_SIZE,
+  });
 }
